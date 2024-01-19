@@ -9,7 +9,7 @@ public partial class User
 
     public string UserName { get; set; } = null!;
 
-    public string? Name { get; set; }
+    public string Name { get; set; }
 
     public DateTime? DateOfBirth { get; set; }
 
