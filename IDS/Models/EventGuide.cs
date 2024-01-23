@@ -13,5 +13,5 @@ public partial class EventGuide
 
     public virtual Event? Event { get; set; }
 
-    public virtual Guide? Guide { get; set; }
+    public virtual User? Guide { get; set; }
 }
