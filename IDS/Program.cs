@@ -27,6 +27,8 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IEventMemberRepository, EventMemberRepository>();
 builder.Services.AddScoped<IEventMemberService, EventMemberService>();
+builder.Services.AddScoped<IEventGuideService, EventGuideService>();
+
 
 builder.Services.AddAuthentication(x =>
 {
