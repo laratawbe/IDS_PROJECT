@@ -17,12 +17,14 @@ builder.Services.AddDbContext<ActClubContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
+var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
-
-var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IEventService, EventService>();
 
 builder.Services.AddAuthentication(x =>
 {
