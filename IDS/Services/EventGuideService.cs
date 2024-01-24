@@ -9,9 +9,9 @@ namespace IDS.Services
     {
         private readonly IRepository<EventGuide> _eventGuideRepo;
 
-        public EventGuideService(IRepository<EventGuide> eventRepo)
+        public EventGuideService(IRepository<EventGuide> eventGuideRepo)
         {
-            _eventGuideRepo = eventRepo;
+            _eventGuideRepo = eventGuideRepo;
         }
         public async Task<List<EventGuide>> GetAllAsync(string? category, string? search, int pageSize = 0, int pageNumber = 1)
         {
@@ -39,6 +39,10 @@ namespace IDS.Services
             {
                 throw new BadRequestException("Message");
 
+            }
+            if (await _eventGuideRepo.GetAsync(em => em.EventId == entity.EventId && em.GuideId == entity.GuideId) != null)
+            {
+                throw new BadRequestException("EventGuide with the same EventID and UserID already exists");
             }
 
             await _eventGuideRepo.CreateAsync(entity);
