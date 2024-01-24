@@ -3,12 +3,8 @@ using IDS.Repository.IRepository;
 
 namespace IDS.Repository
 {
-    public class EventRepository : Repository<Event>, IEventRepository
+    public class EventRepository : IEventRepository
     {
-        private readonly ActClubContext _db;
-        public EventRepository(ActClubContext db) : base(db)
-        {
-            _db = db;
-        }
+        
     }
 }
