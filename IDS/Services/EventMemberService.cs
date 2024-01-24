@@ -72,13 +72,13 @@ namespace IDS.Services
                 throw new BadRequestException("Message");
             }
 
-            if (entity == null || id != entity.EventId)
+            if (entity == null || id != entity.EventMemberId)
             {
                 throw new BadRequestException("Message");
             }
-            if (id != entity.EventId)
+            if (await _eventMemberRepo.GetAsync(em => em.EventId == entity.EventId && em.MemberId == entity.MemberId) != null)
             {
-                throw new BadRequestException("Message");
+                throw new BadRequestException("EventMember with the same EventID and UserID already exists");
             }
 
             await _eventMemberRepo.UpdateAsync(entity);

@@ -86,7 +86,7 @@ namespace IDS.Services
                 throw new BadRequestException("Message");
             }
 
-            if (await _userRepoCRUD.GetAsync(u => u.Name.ToLower() == entity.Name.ToLower()) != null)
+            if (await _userRepoCRUD.GetAsync(u => u.UserName.ToLower() == entity.UserName.ToLower()) != null)
             {
                 throw new BadRequestException("Message");
 

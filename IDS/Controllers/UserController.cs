@@ -10,6 +10,8 @@ using System.Net;
 
 namespace IDS.Controllers
 {
+    [Route("api/users")]
+    [ApiController]
     public class UserController : Controller
     {
 
@@ -80,7 +82,7 @@ namespace IDS.Controllers
             return Ok(_response);
         }
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> GetUsers([FromQuery(Name = "filterCategory")] string? category, [FromQuery] string? search
@@ -113,7 +115,7 @@ namespace IDS.Controllers
         }
 
         [HttpGet("{id:int}", Name = "GetUser")]
-        [AllowAnonymous]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -144,7 +146,7 @@ namespace IDS.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -181,8 +183,7 @@ namespace IDS.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{id:int}", Name = "DeleteUser")]
-        //[Authorize(Roles = "admin")]
-
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> DeleteUser(int id)
         {
             try
@@ -216,7 +217,7 @@ namespace IDS.Controllers
             return _response;
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPut("{id:int}", Name = "UpdateUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
