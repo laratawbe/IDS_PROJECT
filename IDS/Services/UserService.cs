@@ -7,17 +7,25 @@ using System.Net;
 using IDS.Repository.IRepository;
 using IDS.Exceptions;
 using IDS.Services.IServices;
+using System.Linq.Expressions;
+using System.Linq;
 
 namespace IDS.Services
 {
-    public class UserService : IUserService
+    public class UserService :IUserService
     {
 
         private readonly IUserRepository _userRepo;
-        public UserService(IUserRepository userRepo)
+        private readonly IRepository<User> _userRepoCRUD;
+
+        public UserService(IUserRepository userRepo, IRepository<User> userRepoCRUD)
         {
             _userRepo = userRepo;
+            _userRepoCRUD = userRepoCRUD;
         }
+
+    
+
         public async Task<LoginResponseDTO> Login([FromBody] LoginRequestDTO model)
         {
             if (model.UserName == null || model.Password == null)
@@ -50,5 +58,77 @@ namespace IDS.Services
             }
             return user;
         }
-    }
+        public async Task<List<User>> GetAllAsync(string? category, string? search, int pageSize = 0, int pageNumber = 1)
+        {
+            IEnumerable<User> userList = await _userRepoCRUD.GetAllAsync(pageSize: pageSize, pageNumber: pageNumber);
+
+            Func<User, bool> predicate = u =>
+                (string.IsNullOrEmpty(search) || u.Name.ToLower().Contains(search));
+
+            userList = userList.Where(predicate);
+
+            return userList.ToList();
+        }
+
+        public async Task<User> GetAsync(int id)
+        {
+            if (id <= 0)
+            {
+                throw new BadRequestException("Message");
+            }
+            var entity = await _userRepoCRUD.GetAsync(u => u.UserId == id) ?? throw new NotFoundException("Message");
+            return entity;
+        }
+        public async Task<User> CreateAsync(User entity)
+        {
+            if (entity == null)
+            {
+                throw new BadRequestException("Message");
+            }
+
+            if (await _userRepoCRUD.GetAsync(u => u.Name.ToLower() == entity.Name.ToLower()) != null)
+            {
+                throw new BadRequestException("Message");
+
+            }
+
+            await _userRepoCRUD.CreateAsync(entity);
+            return entity;
+        }
+
+        public async Task RemoveAsync(int id)
+        {
+            if (id <= 0)
+            {
+                throw new BadRequestException("Message");
+            }
+            var entity = await _userRepoCRUD.GetAsync(u => u.UserId == id);
+            if (entity == null)
+            {
+                throw new BadRequestException("Message");
+            }
+            await _userRepoCRUD.RemoveAsync(entity);
+
+        }
+
+        public async Task UpdateAsync(int id, User entity)
+        {
+            if (id <= 0)
+            {
+                throw new BadRequestException("Message");
+            }
+
+            if (entity == null || id != entity.UserId)
+            {
+                throw new BadRequestException("Message");
+            }
+            if (id != entity.UserId)
+            {
+                throw new BadRequestException("Message");
+            }
+
+            await _userRepoCRUD.UpdateAsync(entity);
+        }
+
+}
 }
