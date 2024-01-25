@@ -27,6 +27,8 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IEventMemberRepository, EventMemberRepository>();
 builder.Services.AddScoped<IEventMemberService, EventMemberService>();
+builder.Services.AddScoped<IEventGuideService, EventGuideService>();
+
 
 builder.Services.AddAuthentication(x =>
 {
@@ -67,7 +69,13 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<ActClubContext>();
 
+    dbContext.Database.Migrate();
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
