@@ -1,5 +1,4 @@
 ﻿using Azure;
-<<<<<<< HEAD
 using IDS.Models.DTOs;
 using IDS.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +12,7 @@ using System.Linq;
 
 namespace IDS.Services
 {
-    public class UserService :IUserService
+    public class UserService : IUserService
     {
 
         private readonly IUserRepository _userRepo;
@@ -25,7 +24,7 @@ namespace IDS.Services
             _userRepoCRUD = userRepoCRUD;
         }
 
-    
+
 
         public async Task<LoginResponseDTO> Login([FromBody] LoginRequestDTO model)
         {
@@ -41,7 +40,7 @@ namespace IDS.Services
             return loginResponse;
         }
         public async Task<User> Register([FromBody] RegistrationRequestDTO model)
-         {
+        {
             if (model.UserName == null || model.Password == null)
             {
                 throw new BadRequestException("Please fill in username and password");
@@ -130,51 +129,5 @@ namespace IDS.Services
 
             await _userRepoCRUD.UpdateAsync(entity);
         }
-
-}
-=======
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq.Expressions;
-using System.Net;
-using IDS.Models;
-using IDS.Models.DTOs;
-using IDS.Repository.IRepository;
-using IDS.Services.IServices;
-
-namespace IDS.Services
-{
-    public class UserService : IUserService
-    {
-        public Task<User> CreateUserAsync(User user)
-        {
-           
-        }
-
-        public Task<bool> DeleteUserAsync(int id)
-        {
-            
-        }
-
-        public Task<List<User>> GetAllUsersAsync(string? category = null, string? search = null, int pageSize = 0, int pageNumber = 1, string? sortBy = null, bool ascending = true)
-        {
-            
-        }
-
-        public Task<User> GetUserByIdAsync(int userId)
-        {
-            
-        }
-
-        public Task SaveAsync()
-        {
-           
-        }
-
-        public Task UpdateAsync(int id, User updatedUser)
-        {
-
-        }
     }
->>>>>>> e3e4f561d2d2079319f0d1e8592bec8d7d01fe5b
 }
