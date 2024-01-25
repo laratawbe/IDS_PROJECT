@@ -70,15 +70,18 @@ namespace IDS.Services
                 throw new BadRequestException("Message");
             }
 
-            if (entity == null || id != entity.EventId)
+            if (entity == null)
             {
                 throw new BadRequestException("Message");
             }
-            if (id != entity.EventId)
+            if (id != entity.EventGuideId)
             {
                 throw new BadRequestException("Message");
             }
-
+            if (await _eventGuideRepo.GetAsync(em => em.EventId == entity.EventId && em.GuideId == entity.GuideId) != null)
+            {
+                throw new BadRequestException("EventGuide with the same EventID and GuideId already exists");
+            }
             await _eventGuideRepo.UpdateAsync(entity);
         }
     }
